@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+  <title>Chord Example</title>
+  <script type="text/javascript" src="../d3/d3.v3.min.js"></script>
+  <link rel="stylesheet" href="/css/chordstyles.css">
+<style>
+
+  #circle circle {
+    fill: none;
+    pointer-events: all;
+  }
+
+  .group path {
+    fill-opacity: .5;
+  }
+
+  path.chord {
+    stroke: #000;
+    stroke-width: .25px;
+  }
+
+  #circle:hover path.fade {
+    display: none;
+  }
+
+</style>
+</head>
+<body>
+  <script type="text/javascript" src="../js/chord_example.js"></script>
+</body>

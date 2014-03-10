@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>D3 Page Tempalte</title>
+		<!-- Modernizr Check for SVG and inlineSVG -->
+		<script src="js/modernizr.js"></script>
+		<script type"text/javascript">
+			modernizr.load({
+					test: Modernizr.svg && Modernizr.inlinesvg,
+					yep : [ 'js/d3.v3.min.js' , //production d3 here
+							'js/myfirstscript.js' ] //code script here
+			});
+		</script>
+	</head>
+	<body></body>
+</html>

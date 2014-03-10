@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>category influence</title>
+        <!--<link rel="stylesheet" href="/css/bootstrap.min.css">-->
+        <link rel="stylesheet" href="/css/styles.css">
+        <script type="text/javascript" src="../d3/d3.v3.min.js"></script>
+        <script type="text/javascript" src="../jquery/jquery-2.0.3.min.js"></script>
+    </head>
+	<body>
+		<div id="wrapper">
+			<div id="contentHeader"></div>
+			<div id="content">
+				<div id="content-top"></div>
+				<div id="content-bottomleft"></div>
+				<div id="content-bottomright"></div>
+				<div id="navigation-bottomleft">
+					<input id="detractorDesc" type="radio" name="sort" value="detractorDesc" checked>
+					<br>
+					<input id="promoterDesc" type="radio" name="sort" value="promoterDesc">
+					<br>
+					<input id="neutralDesc" type="radio" name="sort" value="neutralDesc">
+					<br>
+					<input id="categoryAsc" type="radio" name="sort" value="categoryAsc">
+					<table id="npsbycategoryControls" >
+		                <tr>
+		                    <td class="npsbycategoryControls tdpad"><p class="labels">Sort on<br>Detractor<br>volume</p></td>
+		                    <td class="npsbycategoryControls"><p class="labels">Sort on<br>Promoter<br>volume</p></td>
+		                    <td class="npsbycategoryControls"><p class="labels">Sort on<br>Neutral<br>volume</p></td>
+		                    <td class="npsbycategoryControls"><p class="labels">Alphabatize<br>Categories<br></p></td>
+		                    <td class="npsbycategoryControls"><p class="labels">Labels </p></td>
+		                    <td class="npsbycategoryControls"><p class="labels">Influence <br> Arrangement</p></td>
+		                </tr>
+		                <tr>
+		                    <td class="npsbycategoryControls">
+		                        <center>
+		                            
+		                        </center>
+		                    </td>
+		                    <td class="npsbycategoryControls">
+		                        <center>
+		                            
+		                        </center>
+		                    </td>
+		                    <td class="npsbycategoryControls">
+		                        <center>
+		                            
+		                        </center>
+		                    </td>
+		                    <td class="npsbycategoryControls">
+		                        <center>
+		                            
+		                        </center>
+		                    </td>
+		                    <td class="npsbycategoryControls">
+		                        <center>
+		                           <div id="showHideLabels"></div>
+		                        </center>
+		                    </td>
+		                    <td class="npsbycategoryControls">
+		                        <div id="view_selection" class="btn-group">
+		                            <a href="#" id="all" class="btn active">Group Bubbles</a>
+		                            <a href="#" id="infBand" class="btn">Separate Bubbles</a>
+		                        </div>
+		                    </td>
+		                </tr>
+		                <tr>
+		                    <td colspan="6">
+		                        <center>
+		                            <select>
+		                                <option value="size">Heatmap Size based on Total Volume</option>
+		                                <option value="count">Heatmap Size based on # of Sub-Categories</option>
+		                            </select>
+		                        </center>
+		                    </td>
+		                </tr>
+	                </table>
+				</div>
+				<div id="legend-bottomright"></div>
+			</div>
+			<div id="footer"></div>
+			<div id="bottom"></div>
+		</div>
+	</body>
+</html>

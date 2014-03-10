@@ -1,0 +1,125 @@
+body
+{
+	/*background-image:url("../images/sw mountains.jpg");*/
+	background-color:white;
+
+}
+p {
+	font:8px calibri,sans-serif;
+	text-align: center;
+	font-weight: bold;
+}
+p#detractorDesc, #promoterDesc, #categoryAsc, #neutralDesc {
+	color:black;
+	font-size: 11px;
+}
+g.promoterBars{
+	fill: green;
+	opacity: .75;
+	stroke: black;
+	stroke-width: .5;
+}
+g.neutralBars {
+	fill: rgb(221,217,195);
+	opacity: .75;
+	stroke: black;
+	stroke-width: .5;
+}
+g.detractorBars {
+	fill: red;
+	opacity: .75;
+	stroke: black;
+	stroke-width: .5;
+}
+.yaxis path,
+.yaxis line {
+	fill: none;
+	stroke: black;
+	shape-rendering: crispEdges;
+}
+.yaxis text {
+	font-family: sans-serif;
+	font-size: 11px;
+	fill: black;
+}
+.xaxis path,
+.xaxis line {
+	fill: none;
+	stroke: black;
+	shape-rendering: crispEdges;
+}
+.xaxis text {
+	font-family: sans-serif;
+	font-size: 9px;
+	fill: black;
+}
+.x2axis path,
+.x2axis line {
+	fill: none;
+	stroke: black;
+	shape-rendering: crispEdges;
+}
+.x2axis text {
+	font-family: sans-serif;
+	font-size: 9px;
+	fill: black;
+}
+.x2label {
+	font-family: sans-serif;
+	font-size: 10px;
+	fill: black;
+	font-weight:bold;
+}
+.xlabel {
+	font-family: sans-serif;
+	font-size: 10px;
+	fill: black;
+	font-weight:bold;
+}
+.ylabel {
+	font-family: sans-serif;
+	font-size: 10px;
+	fill: black;
+	font-weight:bold;
+}
+g.promoterLabels, .detractorLabels, .neutralLabels {
+	text-anchor: middle;
+	font-family: sans-serif;
+	fill: black;
+	font-size: 8px;
+	font-weight: 900;
+}
+line.osatLine {
+	stroke: black;
+	stroke-opacity: 0.60;
+}
+circle.osatPoint {
+	fill: black;
+}
+optgroup.cgOptGroup {font-size: 8px;
+}
+.npsbycategoryControls{
+	border: 1px solid lightgray;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+td.npsbycategoryControls{
+	background-color: lightgray;
+    box-shadow: 0 4px 2px -3px rgba(0, 0, 0, 0.5) inset;
+}
+td.npsbycategoryControls:first-child {
+    border-radius: 5px 0 0 5px;
+    box-shadow: 4px 4px 2px -3px rgba(0, 0, 0, 0.5) inset;
+}
+td.npsbycategoryControls:last-child {
+    border-radius: 0 5px 5px 0;
+    box-shadow: 0 4px 2px -3px rgba(0, 0, 0, 0.5) inset;
+}
+.node {
+  border: solid 1px white;
+  font: 10px sans-serif;
+  line-height: 12px;
+  overflow: hidden;
+  position: absolute;
+  text-indent: 2px;
+}

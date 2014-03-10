@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>category influence</title>
+        <!--<link rel="stylesheet" href="/css/bootstrap.min.css">-->
+        <link rel="stylesheet" href="/css/styles.css">
+        <script type="text/javascript" src="../d3/d3.v3.min.js"></script>
+        <script type="text/javascript" src="../jquery/jquery-2.0.3.min.js"></script>
+    </head>
+    <body>
+        <table align="center">
+        	<tr>
+                <td>
+                     <table>
+                        <tr>
+                            <td>
+                                <div id="treemapLegend"></div>
+                                <!-- you could put the heatmap control here -->
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" id="treemap3"></td>
+                        </tr>
+                        <tr>
+                            <td id="npsbycategory"> </td>
+                            <td id="categoryinfluence"></td>
+                        </tr>
+                    </table>
+                </td>
+                <tr>
+                    <td colspan="2">
+                       <table id="npsbycategoryControls" >
+                            <tr>
+                                <td class="npsbycategoryControls tdpad"><p class="labels">Sort on<br>Detractor<br>volume</p></td>
+                                <td class="npsbycategoryControls"><p class="labels">Sort on<br>Promoter<br>volume</p></td>
+                                <td class="npsbycategoryControls"><p class="labels">Sort on<br>Neutral<br>volume</p></td>
+                                <td class="npsbycategoryControls"><p class="labels">Alphabatize<br>Categories<br></p></td>
+                                <td class="npsbycategoryControls"><p class="labels">Labels </p></td>
+                                <td class="npsbycategoryControls"><p class="labels">Influence <br> Arrangement</p></td>
+                            </tr>
+                            <tr>
+                                <td class="npsbycategoryControls">
+                                    <center>
+                                        <input id="detractorDesc" type="radio" name="sort" value="detractorDesc" checked>
+                                    </center>
+                                </td>
+                                <td class="npsbycategoryControls">
+                                    <center>
+                                        <input id="promoterDesc" type="radio" name="sort" value="promoterDesc">
+                                    </center>
+                                </td>
+                                <td class="npsbycategoryControls">
+                                    <center>
+                                        <input id="neutralDesc" type="radio" name="sort" value="neutralDesc">
+                                    </center>
+                                </td>
+                                <td class="npsbycategoryControls">
+                                    <center>
+                                        <input id="categoryAsc" type="radio" name="sort" value="categoryAsc">
+                                    </center>
+                                </td>
+                                <td class="npsbycategoryControls">
+                                    <center>
+                                       <div id="showHideLabels"></div>
+                                    </center>
+                                </td>
+                                <td class="npsbycategoryControls">
+                                    <div id="view_selection" class="btn-group">
+                                        <a href="#" id="all" class="btn active">All Topics</a>
+                                        <a href="#" id="infBand" class="btn">Topics By Influence Band</a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="6">
+                                    <center>
+                                        <select>
+                                            <option value="size">Heatmap Size based on Total Volume</option>
+                                            <option value="count">Heatmap Size based on # of Sub-Categories</option>
+                                        </select>
+                                    </center>
+                                </td>
+                            </tr>
+                    </table>
+                </td>
+            </tr>
+        	</tr>        	
+    	</table>  
+        <script type="text/javascript" src="../js/bubblebuilder.js"></script>
+        <script type="text/javascript" src="../js/npsbycategory.js"></script>
+    </body>
+</html>
