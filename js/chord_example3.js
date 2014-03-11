@@ -1,6 +1,4 @@
 
-var fill2;
-
 //  CREATE MATRIX AND MAP
 
 d3.csv('data/walmartcooccurrence3.csv', function (error, data) {
@@ -42,7 +40,7 @@ function drawChords (matrix, mmap) {
         //"#F4E3DB", "#F0CBC3", "#F8A2A1", "#F6878E", "#CA9FA6" //pinks
         ]);
 
-    fill2 = function(sentiment, returnText) {
+   var fill2 = function(sentiment, returnText) {
     if (!returnText) {
 
       if (sentiment+0 < -1) {
