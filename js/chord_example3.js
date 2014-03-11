@@ -29,14 +29,15 @@ function drawChords (matrix, mmap) {
   var w = 980, h = 650, r1 = h / 2, r0 = r1 - 100;
 
   var fill = 
-      //d3.scale.category20c();
+      //d3.scale.category20();
       d3.scale.ordinal()
       .domain(d3.range(4))
       .range([//"#69D2E7", "#A7DBD8", "#E0E4CC", "#F38630", "#FA6900" //goldfish
         //"#FF9900", "#424242", "#E9E9E9", "#BCBCBC", "#3299BB" //gamebrooks
         //"#594F4F", "#547980", "#45ADA8", "#9DE0AD", "#E5FCC2" //greens
+        "#1A1A1A", "#333333", "#666666", "#D1D1D1" //blacks
         //"#FE4365", "#FC9D9A", "#F9CDAD", "#C8C8A9", "#83AF9B" //candy
-        "#373737", "#99ADB6", "#CFD9B6", "#E8E6C0" //manly colors
+        //"#373737", "#99ADB6", "#CFD9B6", "#E8E6C0" //manly colors
         //"#F4E3DB", "#F0CBC3", "#F8A2A1", "#F6878E", "#CA9FA6" //pinks
         ]);
 

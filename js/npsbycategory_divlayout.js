@@ -363,6 +363,7 @@ function addCommas(nStr)
 //create treemap
 var treemap = d3.layout.treemap()
 	.round(false)
+  .mode("squarify")
 	.size([chartWidth, chartHeight])
 	.sticky(true)
 	.padding([headerHeight + 1, 1, 1, 1])
