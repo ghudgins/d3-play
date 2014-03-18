@@ -20,6 +20,11 @@
 	border:1px solid #bbb;
 	float:left;
 }
+#content2 div {
+	margin-left:10px;
+	width:1026px;
+	height:308px;
+}
 #content-left {
 	width:120px;
 	height:618px;
@@ -43,6 +48,10 @@
 }
 #content-box2 {
 	margin-left:680px;
+	width:498px
+}
+#content-box3 {
+	margin-left:152s;
 	width:498px
 }
 #footer {
