@@ -14,7 +14,7 @@ var x2; //x2 scale
 var xAxis; //x Axis
 var yAxis; //y Axis
 var x2Axis; //x2 Axis
-var categoryKey = function(d) { return d.CAT_ID-0;}; //data acessor key (for object constancy) - still a bug on this...
+var categoryKey = function(d) { return d.CAT_ID;}; //data acessor key (for object constancy) - still a bug on this...
 var cg; //contains selection of cg drop down
 var currentSort = "detractorSort"; //current sort selection (and default value)
 var barToolTip = CustomTooltip("bar_toolTip", 220);
@@ -66,7 +66,10 @@ var infBand_centers = {
 var fill_color = d3.scale.ordinal()
                 .domain(["Negative", "No Influence", "Positive", "Polarized"])
                 .range(["#d84b2a", "#ddd9c3", "#7aa25c", "#efa819"]);
-
+//chord settings
+var chordPaths;
+var chord;
+var rdr;
 //transition settings
 var transitionSpeed = 1000; //how fast the transitions execute (in ms)
 var transitionEase = "cubic-in-out"; //type of transition
@@ -684,7 +687,15 @@ function zoom(d) {
 	console.log(node.NODE_NAME);
 	console.log(node.NODE_ID);
 
-    this.treemap
+  chordPaths.classed("fade", function(paths) {
+    //console.log(rdr(paths.source).gname);
+    //console.log("my source index: " + p.source.index);
+    //console.log("my target index: " + p.target.index);
+    //console.log("group name: " + rdr(paths.source).gname);
+    return rdr(paths.source).sname == "Tidiness";
+  });
+
+  this.treemap
             .padding([headerHeight/(chartHeight/d.dy), 0, 0, 0])
             .nodes(d);
 	//filter bar chart on click
@@ -1453,7 +1464,7 @@ function redraw() {
 //  CREATE MATRIX AND MAP
 
 d3.csv('data/walmartcooccurrence3.csv', function (error, data) {
-  var mpr = chordMpr(data);
+  mpr = chordMpr(data);
   
   _.each(data, function (d) { //A
     mpr.addToMap(d.PRIMARY_CAT, d.SENTIMENT)
@@ -1527,7 +1538,7 @@ function drawChords (matrix, mmap) {
   }
 
 
-  var chord = d3.layout.chord()
+  chord = d3.layout.chord()
       .padding(.02)
       .sortSubgroups(d3.ascending)
       //.sortChords(d3.descending)
@@ -1548,7 +1559,7 @@ function drawChords (matrix, mmap) {
           .attr("r", r0 + 20)
           .style("fill","none");
 
-  var rdr = chordRdr(matrix, mmap);
+  rdr = chordRdr(matrix, mmap);
   chord.matrix(matrix);
 
 
@@ -1556,6 +1567,7 @@ function drawChords (matrix, mmap) {
       .data(chord.groups())
     .enter().append("svg:g")
       .attr("class", "group")
+      .attr("id", function(d) { return "group_" + rdr(d).gname; })
       .on("mouseover", chord_mouseover)
       .on("mouseout", function (d) { d3.select("#chord_tooltip").style("visibility", "hidden") })
       .on("click", function (d) { d3.select("#chord_tooltip").style("visibility", "hidden") });
@@ -1578,7 +1590,7 @@ function drawChords (matrix, mmap) {
       })
       .text(function(d) { return rdr(d).gname; });
 
-    var chordPaths = svg_chord.selectAll("path.chord")
+    chordPaths = svg_chord.selectAll("path.chord")
           .data(chord.chords())
           .enter()
           .append("svg:path")
@@ -1616,11 +1628,15 @@ function drawChords (matrix, mmap) {
         .style("visibility", "visible")
         .html(groupTip(rdr(d)))
         .style("top", function () { return (d3.event.pageY - 80)+"px"})
-        .style("left", function () { return (d3.event.pageX - 130)+"px";})
+        .style("left", function () { return (d3.event.pageX - 130)+"px";});
 
-      chordPaths.classed("fade", function(p) {
-        return p.source.index != i
-            && p.target.index != i;
+      chordPaths.classed("fade", function(paths) {
+        //console.log(rdr(p.source).gname);
+        //console.log("my source index: " + p.source.index);
+        //console.log("my target index: " + p.target.index);
+        return paths.source.index != i
+            && paths.target.index != i;
       });
+
     }
 };
