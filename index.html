@@ -7,16 +7,20 @@
         <link rel="stylesheet" href="/css/styles2.css">
         <script type="text/javascript" src="../d3/d3.v3.min.js"></script>
         <script type="text/javascript" src="../jquery/jquery-2.0.3.min.js"></script>
+        <script type="text/javascript" src="../js/underscore.js"></script>
+  		<script type="text/javascript" src="../js/mapper.js"></script>
     </head>
 	<body>
 		<div id="header"></div>
 		<div id="wrapper">
+			<div id="chord_tooltip" style="visibility: hidden; top: 32px; left: 356px;"></div>
 			<div id="content-box1">
 				<span class="chartTitle">Understand customer discussion by OSAT</span>
 			</div>
 			<div id="content-box2">
 				<span class="chartTitle">Determine how topics drive satisfaction (size based on topic influence)</span>
 			</div>
+
 			<div id="content">
 				<div id="content-left">
 					<span><strong>Change how heatmap boxes are sized</strong><br><i>Size by...</i></span>
@@ -54,6 +58,9 @@
 				</div>
 				<div id="content-main">
 					<span class="chartTitle">Click on heatmap to navigate and zoom in on the voice of the customer</span>
+				</div>
+				<div id="content-box3">
+					<span class="chartTitle">Investigate the relationships between store departments and what's said about them</span>
 				</div>
 			</div>
 			<div id="footer">

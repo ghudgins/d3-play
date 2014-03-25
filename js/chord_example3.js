@@ -26,9 +26,9 @@ d3.csv('data/walmartcooccurrence3.csv', function (error, data) {
 //  DRAW THE CHORD DIAGRAM
 
 function drawChords (matrix, mmap) {
-  var w = 980, h = 650, r1 = h / 2, r0 = r1 - 100;
+  var chordWidth = 650, chordHeight = 650, r1 = chordHeight / 2, r0 = r1 - 100;
 
-  var fill = 
+  var chordFill = 
       //d3.scale.category20();
       d3.scale.ordinal()
       .domain(d3.range(4))
@@ -41,7 +41,7 @@ function drawChords (matrix, mmap) {
         //"#F4E3DB", "#F0CBC3", "#F8A2A1", "#F6878E", "#CA9FA6" //pinks
         ]);
 
-   var fill2 = function(sentiment, returnText) {
+   var chordFill2 = function(sentiment, returnText) {
     if (!returnText) {
 
       if (sentiment+0 < -1) {
@@ -86,14 +86,14 @@ function drawChords (matrix, mmap) {
       .innerRadius(r0)
       .outerRadius(r0 + 20);
 
-  var svg = d3.select("body").append("svg:svg")
-      .attr("width", w)
-      .attr("height", h)
+  var svg_chord = d3.select("body").append("svg:svg")
+      .attr("width", chordWidth)
+      .attr("height", chordHeight)
     .append("svg:g")
       .attr("id", "circle")
-      .attr("transform", "translate(" + w / 2 + "," + h / 2 + ")");
+      .attr("transform", "translate(" + chordWidth / 2 + "," + chordHeight / 2 + ")");
 
-      svg.append("circle")
+      svg_chord.append("circle")
           .attr("r", r0 + 20)
           .style("fill","none");
 
@@ -101,20 +101,20 @@ function drawChords (matrix, mmap) {
   chord.matrix(matrix);
 
 
-  var g = svg.selectAll("g.group")
+  var chord_g = svg_chord.selectAll("g.group")
       .data(chord.groups())
     .enter().append("svg:g")
       .attr("class", "group")
-      .on("mouseover", mouseover)
-      .on("mouseout", function (d) { d3.select("#tooltip").style("visibility", "hidden") })
-      .on("click", function (d) { d3.select("#tooltip").style("visibility", "hidden") });
+      .on("mouseover", chord_mouseover)
+      .on("mouseout", function (d) { d3.select("#chord_tooltip").style("visibility", "hidden") })
+      .on("click", function (d) { d3.select("#chord_tooltip").style("visibility", "hidden") });
 
-  g.append("svg:path")
+  chord_g.append("svg:path")
       .style("stroke", "black")
-      .style("fill", function(d) { return fill(d.index); })
+      .style("fill", function(d) { return chordFill(d.index); })
       .attr("d", arc);
 
-  g.append("svg:text")
+  chord_g.append("svg:text")
       .each(function(d) { d.angle = (d.startAngle + d.endAngle) / 2; })
       .attr("dy", ".35em")
       .style("font-family", "helvetica, arial, sans-serif")
@@ -127,28 +127,28 @@ function drawChords (matrix, mmap) {
       })
       .text(function(d) { return rdr(d).gname; });
 
-    var chordPaths = svg.selectAll("path.chord")
+    var chordPaths = svg_chord.selectAll("path.chord")
           .data(chord.chords())
           .enter()
           .append("svg:path")
           .attr("class", "chord")
-          .style("stroke", function(d) { return d3.rgb(fill2(+rdr(d).sdata.sentiment)).darker(); })
-          .style("fill", function(d) { return fill2(+rdr(d).sdata.sentiment); })
+          .style("stroke", function(d) { return d3.rgb(chordFill2(+rdr(d).sdata.sentiment)).darker(); })
+          .style("fill", function(d) { return chordFill2(+rdr(d).sdata.sentiment); })
           .attr("d", d3.svg.chord().radius(r0))
           .on("mouseover", function (d) {
-            d3.select("#tooltip")
+            d3.select("#chord_tooltip")
               .style("visibility", "visible")
               .html(chordTip(rdr(d)))
               .style("top", function () { return (d3.event.pageY - 100)+"px"})
               .style("left", function () { return (d3.event.pageX - 100)+"px";})
           })
-          .on("mouseout", function (d) { d3.select("#tooltip").style("visibility", "hidden") })
-          .on("click", function (d) { d3.select("#tooltip").style("visibility", "hidden") });
+          .on("mouseout", function (d) { d3.select("#chord_tooltip").style("visibility", "hidden") })
+          .on("click", function (d) { d3.select("#chord_tooltip").style("visibility", "hidden") });
 
     function chordTip (d) {
       var p = d3.format(".2%"), q = d3.format(",r")
       return "<strong>" + q(d.svalue) + "</strong><i> customers talk about both</i> <strong>" + d.sname + "</strong><i> and </i><strong>" + d.tname + "</strong><br/>"
-        + "<i>with a </i><strong><font color=" + fill2(+d.sdata.sentiment) + ">" + fill2(+d.sdata.sentiment, 1) + "</font></strong><i> average sentiment</i><br/><br/>"
+        + "<i>with a </i><strong><font color=" + chordFill2(+d.sdata.sentiment) + ">" + chordFill2(+d.sdata.sentiment, 1) + "</font></strong><i> average sentiment</i><br/><br/>"
         + "<i>this is...</i><br/>" 
         + "<strong>" + p(d.svalue/d.stotal) + " </strong><i>of comments about </i>" + "<strong>" + d.sname + "</strong> <i>and</i> "
         + (d.sname === d.tname ? "": ("<br/><strong>" + p(d.tvalue/d.ttotal) + " </strong><i>of comments about </i>" + "<strong>" + d.tname + "</strong> "));
@@ -160,8 +160,8 @@ function drawChords (matrix, mmap) {
           + p(d.gvalue/d.mtotal) + "<i> of individual comments total</i> (" + q(d.mtotal) + ")"
     }
 
-    function mouseover(d, i) {
-      d3.select("#tooltip")
+    function chord_mouseover(d, i) {
+      d3.select("#chord_tooltip")
         .style("visibility", "visible")
         .html(groupTip(rdr(d)))
         .style("top", function () { return (d3.event.pageY - 80)+"px"})
