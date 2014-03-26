@@ -1,3 +1,5 @@
+
+
 //npsbycategory bar chart settings
 var margin = {top: 20, right: 10, bottom: 10, left: 120},
     width = 510,
@@ -65,11 +67,10 @@ var infBand_centers = {
 //cat inf color pallet (categorical)
 var fill_color = d3.scale.ordinal()
                 .domain(["Negative", "No Influence", "Positive", "Polarized"])
-                .range(["#d84b2a", "#ddd9c3", "#7aa25c", "#efa819"]);
-//chord settings
+                .range(["#8C2318", "#D6D1B6", "#5E8C6A", "#efa819"]);
+//global chord variables
 var chordPaths;
 var chord;
-var rdr;
 //transition settings
 var transitionSpeed = 1000; //how fast the transitions execute (in ms)
 var transitionEase = "cubic-in-out"; //type of transition
@@ -80,7 +81,6 @@ var transitionEase = "cubic-in-out"; //type of transition
 //****************************************
 //****************************************
 //bubblebuilder.js starts here
-
 
 //enable selectors
 $(document).ready(function() {
@@ -107,9 +107,6 @@ chart_control.toggle_view = function(view_type) {
     display_group_all();
     }
   };
-
-
-
 
 function custom_chart(data) {
   var max_amount = d3.max(data, function(d) { return d.DET_CAT_INF_SCORE*infIntensity; } );
@@ -680,27 +677,17 @@ function idealTextColor (bgColor) {
 
 function zoom(d) {
 
-	console.log("passed in variables:");
-	console.log(d.NODE_NAME);
-	console.log(d.NODE_ID);
-	console.log("node variables:");
-	console.log(node.NODE_NAME);
-	console.log(node.NODE_ID);
+	console.log("Drilling on: " + d.NODE_NAME + ", which has ID: " + d.NODE_ID);
+	console.log("Coming from: " + node.NODE_NAME + ", which has ID: " + node.NODE_ID);
 
-  chordPaths.classed("fade", function(paths) {
-    //console.log(rdr(paths.source).gname);
-    //console.log("my source index: " + p.source.index);
-    //console.log("my target index: " + p.target.index);
-    //console.log("group name: " + rdr(paths.source).gname);
-    return rdr(paths.source).sname == "Tidiness";
-  });
 
   this.treemap
             .padding([headerHeight/(chartHeight/d.dy), 0, 0, 0])
             .nodes(d);
 	//filter bar chart on click
 	//handling for show all selection
-  console.log("level:" + d.depth);
+  console.log("After drilling, you are on level " + d.depth);
+
 	if( d.depth == 0) {
 		
 		console.log("removing filter...");
@@ -725,6 +712,11 @@ function zoom(d) {
 			.attr("opacity", "1");
 
 
+    //check for faded chords and remove the ones that are
+    if (d3.selectAll("path.fade")[0].length > 0) {
+      d3.selectAll("path.fade").classed("fade", false);
+    };
+
 		redraw();
 
 	} else if ( d.depth == 1 ) {
@@ -734,7 +726,24 @@ function zoom(d) {
 		csvdataset = fullDataContainer;
 		//filter to selection in dropdown
 		csvdataset = csvdataset.filter(function(d1){return d1.Category_Group == d.NODE_NAME ;});
-		
+    //fade the chords that are not part of the drill
+    chordPaths.classed("fade", function(path) {
+
+      var child = [];      
+      var grandchildren = [];
+
+      for (i=0; i<d.children.length; i++) {
+        child.push(d.children[i].NODE_NAME);
+
+        for (j=0; j<d.children[i].children.length; j++) {
+          grandchildren.push(d.children[i].children[j].NODE_NAME);
+        };
+      };
+      var grandChildSet = d3.set(grandchildren);
+      return !grandChildSet.has(rdr(path.source).gname) && !grandChildSet.has(rdr(path.target).gname);
+
+    });
+	
 		//carry previous sort value
 		if( currentSort == "detractorSort") {
 			sortDetractorDesc();
@@ -762,7 +771,16 @@ function zoom(d) {
     csvdataset = fullDataContainer;
     //filter to selection in dropdown
     csvdataset = csvdataset.filter(function(d1){return d1.L2_Category == d.NODE_NAME ;});
-    
+    //fade the chords that are not part of the drill
+    chordPaths.classed("fade", function(path) {
+      var child = [];      
+      for (i=0; i<d.children.length; i++) {
+        child.push(d.children[i].NODE_NAME);
+      };
+      var childSet = d3.set(child);
+      return !childSet.has(rdr(path.source).gname) && !childSet.has(rdr(path.target).gname);
+
+    });    
     //carry previous sort value
     if( currentSort == "detractorSort") {
       sortDetractorDesc();
@@ -1464,7 +1482,7 @@ function redraw() {
 //  CREATE MATRIX AND MAP
 
 d3.csv('data/walmartcooccurrence3.csv', function (error, data) {
-  mpr = chordMpr(data);
+  var mpr = chordMpr(data);
   
   _.each(data, function (d) { //A
     mpr.addToMap(d.PRIMARY_CAT, d.SENTIMENT)
@@ -1511,7 +1529,7 @@ function drawChords (matrix, mmap) {
       } else if (sentiment+0 >= -1 && sentiment+0 < -0.40) {
         return "#F2C45A";
       } else if (sentiment+0 >= -0.40 && sentiment+0 < 0.40) {
-        return "#BFB35A";
+        return "#D6D1B6";
       } else if (sentiment+0 >= 0.40 && sentiment+0 < 1) {
         return "#88A65E";
       } else {
@@ -1567,10 +1585,15 @@ function drawChords (matrix, mmap) {
       .data(chord.groups())
     .enter().append("svg:g")
       .attr("class", "group")
-      .attr("id", function(d) { return "group_" + rdr(d).gname; })
+      //.attr("id", function(d) { return "group_" + rdr(d).gname; })
       .on("mouseover", chord_mouseover)
       .on("mouseout", function (d) { d3.select("#chord_tooltip").style("visibility", "hidden") })
-      .on("click", function (d) { d3.select("#chord_tooltip").style("visibility", "hidden") });
+      .on("click", function (d, i) { d3.select("#chord_tooltip").style("visibility", "hidden") 
+        chordPaths.classed("fade", function(path) { 
+          return path.source.index != i
+          && path.target.index != i;
+        });
+      });
 
   chord_g.append("svg:path")
       .style("stroke", "black")
@@ -1606,12 +1629,12 @@ function drawChords (matrix, mmap) {
               .style("left", function () { return (d3.event.pageX - 100)+"px";})
           })
           .on("mouseout", function (d) { d3.select("#chord_tooltip").style("visibility", "hidden") })
-          .on("click", function (d) { d3.select("#chord_tooltip").style("visibility", "hidden") });
+          .on("click", function (d, i) { d3.select("#chord_tooltip").style("visibility", "hidden");}) ;
 
     function chordTip (d) {
       var p = d3.format(".2%"), q = d3.format(",r")
       return "<strong>" + q(d.svalue) + "</strong><i> customers talk about both</i> <strong>" + d.sname + "</strong><i> and </i><strong>" + d.tname + "</strong><br/>"
-        + "<i>with a </i><strong><font color=" + chordFill2(+d.sdata.sentiment) + ">" + chordFill2(+d.sdata.sentiment, 1) + "</font></strong><i> average sentiment</i><br/><br/>"
+        + "<i>with a </i><strong><font color=" + d3.rgb(chordFill2(+d.sdata.sentiment)).darker() + ">" + chordFill2(+d.sdata.sentiment, 1) + "</font></strong><i> average sentiment</i><br/><br/>"
         + "<i>this is...</i><br/>" 
         + "<strong>" + p(d.svalue/d.stotal) + " </strong><i>of comments about </i>" + "<strong>" + d.sname + "</strong> <i>and</i> "
         + (d.sname === d.tname ? "": ("<br/><strong>" + p(d.tvalue/d.ttotal) + " </strong><i>of comments about </i>" + "<strong>" + d.tname + "</strong> "));
@@ -1629,14 +1652,6 @@ function drawChords (matrix, mmap) {
         .html(groupTip(rdr(d)))
         .style("top", function () { return (d3.event.pageY - 80)+"px"})
         .style("left", function () { return (d3.event.pageX - 130)+"px";});
-
-      chordPaths.classed("fade", function(paths) {
-        //console.log(rdr(p.source).gname);
-        //console.log("my source index: " + p.source.index);
-        //console.log("my target index: " + p.target.index);
-        return paths.source.index != i
-            && paths.target.index != i;
-      });
 
     }
 };
