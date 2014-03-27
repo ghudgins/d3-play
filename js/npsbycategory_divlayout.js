@@ -67,7 +67,7 @@ var infBand_centers = {
 //cat inf color pallet (categorical)
 var fill_color = d3.scale.ordinal()
                 .domain(["Negative", "No Influence", "Positive", "Polarized"])
-                .range(["#8C2318", "#D6D1B6", "#5E8C6A", "#efa819"]);
+                .range(["#8C2318", "#D6D1B6", "#5E8C6A", "#F2C45A"]);
 //global chord variables
 var chordPaths;
 var chord;
@@ -153,6 +153,7 @@ function custom_chart(data) {
     .attr("stroke-width", 0.50)
     .attr("stroke", function(d) {return d3.rgb(fill_color(d.group)).darker();})
     .attr("id", function(d) { return  "bubble_" + d.id; })
+    .classed("bubbles", true)
     .on("mouseover", function(d, i) {show_details(d, i, this);} )
     .on("mouseout", function(d, i) {hide_details(d, i, this);} );
 
@@ -510,11 +511,14 @@ function generateTreemap() {
 	        .classed("background", true)
 	        .style("fill", function(d) {
 	            if (d.SENTIMENT_SCORE-0 <= redUpperBound) {
-	            	return "rgb(" + detractorColors(d.SENTIMENT_SCORE-0) + ",0,0)";
+	            	//return "rgb(" + detractorColors(d.SENTIMENT_SCORE-0) + ",0,0)";
+                return "rgb(130,35,24)";
 	            } else  if (d.SENTIMENT_SCORE-0 >= greenLowerBound) {
-	            	return "rgb(0," + promoterColors(d.SENTIMENT_SCORE-0) + ",0)";
+	            	//return "rgb(0," + promoterColors(d.SENTIMENT_SCORE-0) + ",0)";
+                return "rgb(94,140,106)";
 	            } else {
-	            	return neutralColors; //Ellen's Tan color
+	            	//return neutralColors; //Ellen's Tan color
+                return "rgb(221,217,195)";
 	            };
 	        });
 	childEnterTransition.append('text')
@@ -550,11 +554,14 @@ function generateTreemap() {
 	        })
 	        .style("fill", function(d) {
 	            if (d.SENTIMENT_SCORE-0 <= redUpperBound) {
-	            	return "rgb(" + detractorColors(d.SENTIMENT_SCORE-0) + ",0,0)";
+	            	//return "rgb(" + detractorColors(d.SENTIMENT_SCORE-0) + ",0,0)";
+                return "rgb(130,35,24)";
 	            } else  if (d.SENTIMENT_SCORE-0 >= greenLowerBound) {
-	            	return "rgb(0," + promoterColors(d.SENTIMENT_SCORE-0) + ",0)";
+	            	//return "rgb(0," + promoterColors(d.SENTIMENT_SCORE-0) + ",0)";
+                return "rgb(94,140,106)";
 	            } else {
-	            	return neutralColors;
+	            	//return neutralColors;
+                return "rgb(221,217,195)";
 	            	//return color(d.parent.NODE_ID);
 	            };
 	        });
@@ -735,8 +742,10 @@ function zoom(d) {
       for (i=0; i<d.children.length; i++) {
         child.push(d.children[i].NODE_NAME);
 
-        for (j=0; j<d.children[i].children.length; j++) {
-          grandchildren.push(d.children[i].children[j].NODE_NAME);
+        if(d.children[i].children) {
+          for (j=0; j<d.children[i].children.length; j++) {
+            grandchildren.push(d.children[i].children[j].NODE_NAME);
+          };
         };
       };
       var grandChildSet = d3.set(grandchildren);
@@ -907,9 +916,11 @@ function zoom(d) {
                 if (d.children) {
 					return headerColor; 
 				} else if (d.SENTIMENT_SCORE-0 <= redUpperBound) {
-	            	return "rgb(" + detractorColors(d.SENTIMENT_SCORE-0) + ",0,0)";
+	            	//return "rgb(" + detractorColors(d.SENTIMENT_SCORE-0) + ",0,0)";
+                return "rgb(130,35,24)";
 	            } else if (d.SENTIMENT_SCORE-0 >= greenLowerBound) {
-					return "rgb(0," + promoterColors(d.SENTIMENT_SCORE-0) + ",0)";
+					//return "rgb(0," + promoterColors(d.SENTIMENT_SCORE-0) + ",0)";
+          return "rgb(94,140,106)";
 	        	} else {
 	            	return neutralColors;
 	            };
