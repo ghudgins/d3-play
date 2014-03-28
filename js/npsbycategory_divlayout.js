@@ -1,4 +1,8 @@
-
+//nps by category - a view of feedback information coming from surveys
+//the goal is to show how feedback effects scores in a myriad of analysis visuals
+//data powered by clarabridge
+//visuals powered by d3, jquery, underscore (and their fantastic communities)
+//author:  graham hudgins
 
 //npsbycategory bar chart settings
 var margin = {top: 20, right: 10, bottom: 10, left: 120},
@@ -121,11 +125,11 @@ function custom_chart(data) {
       id: d.CAT_ID-0,
       radius: radius_scale(d.DET_CAT_INF_SCORE*infIntensity + d.PRO_CAT_INF_SCORE*infIntensity),
       value: d.DET_CAT_INF_SCORE*infIntensity + d.PRO_CAT_INF_SCORE*infIntensity,
-      name: d.Category,
-      Total_Documents: d.Total_Documents,
+      name: d.CATEGORY,
+      TOTAL_DOCUMENTS: d.TOTAL_DOCUMENTS,
       group: determine_influence_band(d),
-      Category_Group: d.Category_Group,
-      L2_Category: d.L2_Category,
+      CATEGORY_GROUP: d.CATEGORY_GROUP,
+      L2_CATEGORY: d.L2_CATEGORY,
       detInf: d.DET_CAT_INF_SCORE,
       proInf: d.PRO_CAT_INF_SCORE,
       x: Math.random() * 900,
@@ -241,7 +245,7 @@ function show_details(data, i, element) {
   content +="<span class=\"name\">Detractor Influence:</span><span class=\"value\"> " + d3.round(data.detInf*infIntensity,2) + "</span><br/>";
   content +="<span class=\"name\">Promoter Influence:</span><span class=\"value\"> " + d3.round(data.proInf*infIntensity,2) + "</span><br/>";
   content +="<span class=\"name\">Influence Band:</span><span class=\"value\"> " + data.group + "</span><br/>";
-  content +="<span class=\"name\">Total Volume:</span><span class=\"value\"> " + data.Total_Documents + "</span>";
+  content +="<span class=\"name\">Total Volume:</span><span class=\"value\"> " + data.TOTAL_DOCUMENTS + "</span>";
   tooltip.showTooltip(content, d3.event);
 }
 
@@ -253,9 +257,9 @@ function hide_details(data, i, element) {
 
 function bar_show_details(data, i, element) {
   d3.select(element).attr("stroke", "black").attr("stroke-width", 2);
-  var content ="<span class=\"name\">Detractor Volume:</span><span class=\"value\"> " + data.Detractor_Documents + "</span><br/>";
-  content +="<span class=\"name\">Promoter Volume:</span><span class=\"value\"> " + data.Promoter_Documents + "</span><br/>";
-  content +="<span class=\"name\">Neutral Volume:</span><span class=\"value\"> " + data.Neutral_Documents + "</span>";
+  var content ="<span class=\"name\">Detractor Volume:</span><span class=\"value\"> " + data.DETRACTOR_DOCUMENTS + "</span><br/>";
+  content +="<span class=\"name\">Promoter Volume:</span><span class=\"value\"> " + data.PROMOTER_DOCUMENTS + "</span><br/>";
+  content +="<span class=\"name\">Neutral Volume:</span><span class=\"value\"> " + data.NEUTRAL_DOCUMENTS + "</span>";
   barToolTip.showTooltip(content, d3.event);
 }
 
@@ -384,7 +388,7 @@ var chart = d3.select("#content-main")
 	.append("svg:g");
 //NPSBYCATEGORY - load data...only move forward once data is loaded
 //need to add cool loading screen functions.  maybe in a few years... :)
-d3.csv("../data/walmartdata.csv",function(error,csvdata) {
+d3.csv("../data/csvdataset.csv",function(error,csvdata) {
 	if (error) {
 		console.log(error); 
 	} else {
@@ -396,7 +400,7 @@ d3.csv("../data/walmartdata.csv",function(error,csvdata) {
 		chart_control.toggle_view("all");
 
 		//TREEMAP - load data..only move forward once data is loaded 
-		d3.csv("../data/walmarthdata.csv",function(error, data) {
+		d3.csv("../data/hdata.csv",function(error, data) {
 		  if(error) {
 		    console.log(error);
 		  } else {
@@ -408,7 +412,7 @@ d3.csv("../data/walmartdata.csv",function(error,csvdata) {
 		    // create the tree array in JSON format    
 		    data.forEach(function(nodeFE) {
 		        // add to parent
-		        var parentFE = dataMap[nodeFE.parent];
+		        var parentFE = dataMap[nodeFE.PARENT];
 		        if (parentFE) {
 		            // create child array if it doesn't exist
 		            (parentFE.children || (parentFE.children = []))
@@ -732,7 +736,7 @@ function zoom(d) {
 		//reload full dataset
 		csvdataset = fullDataContainer;
 		//filter to selection in dropdown
-		csvdataset = csvdataset.filter(function(d1){return d1.Category_Group == d.NODE_NAME ;});
+		csvdataset = csvdataset.filter(function(d1){return d1.CATEGORY_GROUP == d.NODE_NAME ;});
     //fade the chords that are not part of the drill
     chordPaths.classed("fade", function(path) {
 
@@ -763,9 +767,9 @@ function zoom(d) {
 		} else {
 			sortCategoryAsc();
 		};
-
+    //bubble fading when zooming
 		vis.selectAll("circle")
-			.data(catInfNodes.filter(function(d1) { return d1.Category_Group != d.NODE_NAME; }), function(d) {return d.id;})
+			.data(catInfNodes.filter(function(d1) { return d1.CATEGORY_GROUP != d.NODE_NAME; }), function(d) {return d.id;})
 			.transition()
 			.duration(transitionSpeed)
 			.attr("opacity", "0.1");
@@ -779,7 +783,7 @@ function zoom(d) {
     //reload full dataset
     csvdataset = fullDataContainer;
     //filter to selection in dropdown
-    csvdataset = csvdataset.filter(function(d1){return d1.L2_Category == d.NODE_NAME ;});
+    csvdataset = csvdataset.filter(function(d1){return d1.L2_CATEGORY == d.NODE_NAME ;});
     //fade the chords that are not part of the drill
     chordPaths.classed("fade", function(path) {
       var child = [];      
@@ -802,7 +806,7 @@ function zoom(d) {
     };
 
     vis.selectAll("circle")
-      .data(catInfNodes.filter(function(d1) { return d1.L2_Category != d.NODE_NAME; }), function(d) {return d.id;})
+      .data(catInfNodes.filter(function(d1) { return d1.L2_CATEGORY != d.NODE_NAME; }), function(d) {return d.id;})
       .transition()
       .duration(transitionSpeed)
       .attr("opacity", "0.1");
@@ -977,13 +981,13 @@ function generateStackedOSAT() {
 	
 	//set scales
 	y = d3.scale.ordinal()
-		.domain( csvdataset.slice(0,maxY).map(function(d) { return d.Category;}, categoryKey))
+		.domain( csvdataset.slice(0,maxY).map(function(d) { return d.CATEGORY;}, categoryKey))
 		.rangeRoundBands([margin.top, height],0.05);
 	x = d3.scale.linear()
 		.domain([0, (1+scalePadding) * (
-			d3.max(csvdataset.slice(0,maxY), function(d) {return d.Detractor_Documents-0;}) 
-			+ d3.max(csvdataset.slice(0,maxY), function(d) {return d.Neutral_Documents-0;})
-			+ d3.max(csvdataset.slice(0,maxY), function(d) {return d.Promoter_Documents-0;}))
+			d3.max(csvdataset.slice(0,maxY), function(d) {return d.DETRACTOR_DOCUMENTS-0;}) 
+			+ d3.max(csvdataset.slice(0,maxY), function(d) {return d.NEUTRAL_DOCUMENTS-0;})
+			+ d3.max(csvdataset.slice(0,maxY), function(d) {return d.PROMOTER_DOCUMENTS-0;}))
 			])
 		.range([margin.left, width - 10]);
 	x2 = d3.scale.linear()
@@ -1038,13 +1042,12 @@ function generateStackedOSAT() {
 		.data(csvdataset.slice(0,maxY), categoryKey)
 		.enter()
 		.append("rect")
-		.attr("y", function(d, i) {	return y(d.Category);})
+		.attr("y", function(d, i) {	return y(d.CATEGORY);})
 		.attr("width", 1)
     .attr("height",  y.rangeBand())
 		.attr("x", margin.left)
     .on("mouseover", function(d, i) {bar_show_details(d, i, this);} )
-    .on("mouseout", function(d, i) {bar_hide_details(d, i, this);} )
-		;
+    .on("mouseout", function(d, i) {bar_hide_details(d, i, this);} );
 
 	//build neutral document bar
 	neutralBars = svg.append("g")
@@ -1054,7 +1057,7 @@ function generateStackedOSAT() {
 		.data(csvdataset.slice(0,maxY), categoryKey)
 		.enter()
 		.append("rect")
-		.attr("y", function(d, i) { return y(d.Category);})
+		.attr("y", function(d, i) { return y(d.CATEGORY);})
 		.attr("x", margin.left)
     .attr("height",  y.rangeBand())
     .attr("width", 1)
@@ -1069,7 +1072,7 @@ function generateStackedOSAT() {
 		.data(csvdataset.slice(0,maxY), categoryKey)
 		.enter()
 		.append("rect")
-		.attr("y", function(d, i) { return y(d.Category);})
+		.attr("y", function(d, i) { return y(d.CATEGORY);})
 		.attr("x", margin.left) 
     .attr("height",  y.rangeBand())
     .attr("width", 1)
@@ -1085,9 +1088,9 @@ function generateStackedOSAT() {
 		.enter()
 		.append("line")
 		.style("stroke-dasharray",("5, 5"))
-		.attr("y1", function(d, i) { return y(d.Category) + y.rangeBand() / 2;})
+		.attr("y1", function(d, i) { return y(d.CATEGORY) + y.rangeBand() / 2;})
 		.attr("x1", margin.left)
-    .attr("y2", function(d) { return y(d.Category) + y.rangeBand() / 2;})
+    .attr("y2", function(d) { return y(d.CATEGORY) + y.rangeBand() / 2;})
 		.attr("x2", function(d) { return margin.left;})
 		.attr("class", "osatLine")
 		.attr("opacity", 0.50);
@@ -1100,7 +1103,7 @@ function generateStackedOSAT() {
 		.data(csvdataset.slice(0,maxY), categoryKey)
 		.enter()
 		.append("circle")
-		.attr("cy", function(d, i) { return y(d.Category) + y.rangeBand() / 2;})
+		.attr("cy", function(d, i) { return y(d.CATEGORY) + y.rangeBand() / 2;})
 		.attr("cx", margin.left)
     .attr("r", 4)
 		.attr("class", "osatPoint")
@@ -1134,9 +1137,9 @@ function generateStackedOSAT() {
 		.data(csvdataset.slice(0,maxY))
 		.enter()
 		.append("text")
-		.attr("y", function(d, i){ return y(d.Category) + y.rangeBand() / 2 + 2.5; /*2.5 = adjust for 8px font size*/})
-		.attr("x", function(d){	return x(d.Detractor_Documents/2 - 4) ;})
-		.text(function(d) {return  d3.round( (d.Detractor_Documents / d.Total_Documents) * 100, 0) + "%" ;});
+		.attr("y", function(d, i){ return y(d.CATEGORY) + y.rangeBand() / 2 + 2.5; /*2.5 = adjust for 8px font size*/})
+		.attr("x", function(d){	return x(d.DETRACTOR_DOCUMENTS/2 - 4) ;})
+		.text(function(d) {return  d3.round( (d.DETRACTOR_DOCUMENTS / d.TOTAL_DOCUMENTS) * 100, 0) + "%" ;});
 
 	//build promoter labels (%ages)
 	promoterLabels = svg.append("g")
@@ -1146,9 +1149,9 @@ function generateStackedOSAT() {
 		.data(csvdataset.slice(0,maxY))
 		.enter()
 		.append("text")
-		.attr("y", function(d, i){return y(d.Category) + y.rangeBand() / 2 + 2.5; /*2.5 = adjust for 8px font size*/ })
-		.attr("x", function(d){	return x(d.Promoter_Documents/2 - 4 + (d.Detractor_Documents-0) + (d.Neutral_Documents-0) ) ;})
-		.text(function(d) {return  d3.round( (d.Promoter_Documents / d.Total_Documents) * 100, 0) + "%" ;});
+		.attr("y", function(d, i){return y(d.CATEGORY) + y.rangeBand() / 2 + 2.5; /*2.5 = adjust for 8px font size*/ })
+		.attr("x", function(d){	return x(d.PROMOTER_DOCUMENTS/2 - 4 + (d.DETRACTOR_DOCUMENTS-0) + (d.NEUTRAL_DOCUMENTS-0) ) ;})
+		.text(function(d) {return  d3.round( (d.PROMOTER_DOCUMENTS / d.TOTAL_DOCUMENTS) * 100, 0) + "%" ;});
 
 	//build neutral labels (%ages)
 	neutralLabels = svg.append("g")
@@ -1158,9 +1161,9 @@ function generateStackedOSAT() {
 		.data(csvdataset.slice(0,maxY))
 		.enter()
 		.append("text")
-		.attr("y", function(d, i){return y(d.Category) + y.rangeBand() / 2 + 2.5; /*2.5 = adjust for 8px font size*/})
-		.attr("x", function(d){ return x(d.Neutral_Documents/2 - 4 + (d.Detractor_Documents-0) ) ;})
-		.text(function(d) {	return  d3.round( (d.Neutral_Documents / d.Total_Documents) * 100, 0) + "%" ;});
+		.attr("y", function(d, i){return y(d.CATEGORY) + y.rangeBand() / 2 + 2.5; /*2.5 = adjust for 8px font size*/})
+		.attr("x", function(d){ return x(d.NEUTRAL_DOCUMENTS/2 - 4 + (d.DETRACTOR_DOCUMENTS-0) ) ;})
+		.text(function(d) {	return  d3.round( (d.NEUTRAL_DOCUMENTS / d.TOTAL_DOCUMENTS) * 100, 0) + "%" ;});
 };
 
 //sorting function
@@ -1168,7 +1171,7 @@ function sortDetractorDesc() {
   currentSort = "detractorSort";
   csvdataset.sort(function(obj1, obj2) {
 	// Descending: sencond value less than the first
-		return  obj2.Detractor_Documents - obj1.Detractor_Documents;
+		return  obj2.DETRACTOR_DOCUMENTS - obj1.DETRACTOR_DOCUMENTS;
 
 	});
 };
@@ -1177,7 +1180,7 @@ function sortPromoterDesc() {
 	currentSort = "promoterSort";
 	csvdataset.sort(function(obj1, obj2) {
 	// Descending: sencond value less than the first
-		return  obj2.Promoter_Documents - obj1.Promoter_Documents;
+		return  obj2.PROMOTER_DOCUMENTS - obj1.PROMOTER_DOCUMENTS;
 
 	});
 };
@@ -1186,14 +1189,14 @@ function sortNeutralDesc() {
   currentSort = "neutralSort";
   csvdataset.sort(function(obj1, obj2) {
 	// Descending: sencond value less than the first
-		return  obj2.Neutral_Documents - obj1.Neutral_Documents;
+		return  obj2.NEUTRAL_DOCUMENTS - obj1.NEUTRAL_DOCUMENTS;
 
 	});
 };
 //sorting function
 function sortCategoryAsc() {
 	currentSort = "categorySort";
-	csvdataset.sort(objTextSort("Category"));
+	csvdataset.sort(objTextSort("CATEGORY"));
 };
 
 //sorting function for text
@@ -1246,12 +1249,12 @@ d3.select("input#categoryAsc")
 function redraw() {
 	
 	//re-build y axis because of sort
-	y.domain(csvdataset.slice(0,maxY).map(function(d) { return d.Category;}) );
+	y.domain(csvdataset.slice(0,maxY).map(function(d) { return d.CATEGORY;}) );
 	//update x scale
 	x.domain([0, (1+scalePadding) * (
-			d3.max(csvdataset.slice(0,maxY), function(d) { return d.Detractor_Documents-0;}) 
-			+ d3.max(csvdataset.slice(0,maxY), function(d) { return d.Neutral_Documents-0;})
-			+ d3.max(csvdataset.slice(0,maxY), function(d) { return d.Promoter_Documents-0;}))
+			d3.max(csvdataset.slice(0,maxY), function(d) { return d.DETRACTOR_DOCUMENTS-0;}) 
+			+ d3.max(csvdataset.slice(0,maxY), function(d) { return d.NEUTRAL_DOCUMENTS-0;})
+			+ d3.max(csvdataset.slice(0,maxY), function(d) { return d.PROMOTER_DOCUMENTS-0;}))
 			]);
 			x2.domain([
 				(1-scalePadding) * d3.min(csvdataset.slice(0,maxY), function(d) { return d.OSAT-0;})
@@ -1268,23 +1271,23 @@ function redraw() {
 	//new data (detractors, neutral, promoters)
 	newDetractorBars.enter().insert("rect")
 		.attr("y", function(d, i) {	return height;})
-		.attr("width", function(d, i) {	return x(d.Detractor_Documents-0) - margin.left;})
+		.attr("width", function(d, i) {	return x(d.DETRACTOR_DOCUMENTS-0) - margin.left;})
 		.attr("height",  y.rangeBand())
 		.attr("x", margin.left)
     .on("mouseover", function(d, i) {bar_show_details(d, i, this);} )
     .on("mouseout", function(d, i) {bar_hide_details(d, i, this);} );
 	newPromoterBars.enter().insert("rect")
 		.attr("y", function(d, i) {	return height;	})
-		.attr("x", function(d) {return x( (d.Detractor_Documents-0) + (d.Neutral_Documents-0) );})
+		.attr("x", function(d) {return x( (d.DETRACTOR_DOCUMENTS-0) + (d.NEUTRAL_DOCUMENTS-0) );})
 		.attr("height",  y.rangeBand())
-		.attr("width", function(d) {return x(d.Promoter_Documents) - margin.left;})
+		.attr("width", function(d) {return x(d.PROMOTER_DOCUMENTS-0) - margin.left;})
     .on("mouseover", function(d, i) {bar_show_details(d, i, this);} )
     .on("mouseout", function(d, i) {bar_hide_details(d, i, this);} );		
 	newNeutralBars.enter().insert("rect")
 		.attr("y", function(d, i) {	return height;})
-		.attr("x", function(d) {return x( (d.Detractor_Documents-0) );	})
+		.attr("x", function(d) {return x( (d.DETRACTOR_DOCUMENTS-0) );	})
 		.attr("height",  y.rangeBand())
-		.attr("width", function(d) {return x(d.Neutral_Documents ) - margin.left;})
+		.attr("width", function(d) {return x(d.NEUTRAL_DOCUMENTS ) - margin.left;})
     .on("mouseover", function(d, i) {bar_show_details(d, i, this);} )
     .on("mouseout", function(d, i) {bar_hide_details(d, i, this);} );
 
@@ -1293,26 +1296,26 @@ function redraw() {
 		.transition()
 		.duration(transitionSpeed)
 		.ease(transitionEase)
-		.attr("y", function(d, i) {return y(d.Category);})
-		.attr("width", function(d, i) {	return x(d.Detractor_Documents-0) - margin.left;})
+		.attr("y", function(d, i) {return y(d.CATEGORY);})
+		.attr("width", function(d, i) {	return x(d.DETRACTOR_DOCUMENTS-0) - margin.left;})
 		.attr("height",  y.rangeBand())
 		.attr("x", margin.left);
 	newNeutralBars
 		.transition()
 		.duration(transitionSpeed)
 		.ease(transitionEase)
-		.attr("y", function(d, i) {	return y(d.Category);})
-		.attr("x", function(d) {return x( (d.Detractor_Documents-0) );})
+		.attr("y", function(d, i) {	return y(d.CATEGORY);})
+		.attr("x", function(d) {return x( (d.DETRACTOR_DOCUMENTS-0) );})
 		.attr("height",  y.rangeBand())
-		.attr("width", function(d) {return x(d.Neutral_Documents ) - margin.left;});
+		.attr("width", function(d) {return x(d.NEUTRAL_DOCUMENTS ) - margin.left;});
 	newPromoterBars
 		.transition()
 		.duration(transitionSpeed)
 		.ease(transitionEase)
-		.attr("y", function(d, i) {	return y(d.Category);})
-		.attr("x", function(d) {return x( (d.Detractor_Documents-0) + (d.Neutral_Documents-0) );})
+		.attr("y", function(d, i) {	return y(d.CATEGORY);})
+		.attr("x", function(d) {return x( (d.DETRACTOR_DOCUMENTS-0) + (d.NEUTRAL_DOCUMENTS-0) );})
 		.attr("height",  y.rangeBand())
-		.attr("width", function(d) {return x(d.Promoter_Documents) - margin.left;});
+		.attr("width", function(d) {return x(d.PROMOTER_DOCUMENTS) - margin.left;});
 
 	//exit data (detractors, neutral, promoters)
 	newDetractorBars.exit()
@@ -1386,8 +1389,8 @@ function redraw() {
 		.duration(transitionSpeed)
 		.ease(transitionEase)
 		.attr({
-			"y1": function(d, i) {return y(d.Category) + y.rangeBand() / 2;},
-			"y2": function(d) {	return y(d.Category) + y.rangeBand() / 2;},
+			"y1": function(d, i) {return y(d.CATEGORY) + y.rangeBand() / 2;},
+			"y2": function(d) {	return y(d.CATEGORY) + y.rangeBand() / 2;},
 			"x1": function(d) {	return x2(d.OSAT-0)-3;},
 			"x2": function(d) {	return margin.left;}
 		})
@@ -1396,7 +1399,7 @@ function redraw() {
 	newOsatPoints.transition()
 		.duration(transitionSpeed)
 		.ease(transitionEase)
-		.attr("cy", function(d, i) { return y(d.Category) + y.rangeBand() / 2;})
+		.attr("cy", function(d, i) { return y(d.CATEGORY) + y.rangeBand() / 2;})
 		.attr("cx", function(d) { return x2(d.OSAT-0);})
 		.attr("r", 4)
 		.attr("class", "osatPoint")
@@ -1428,39 +1431,39 @@ function redraw() {
 	//new labels (detractors, neutral, promoters)
 	newDetractorLabels.enter().insert("text")
 		.attr("y", function(d, i){ return height; })
-		.attr("x", function(d){	return x(d.Detractor_Documents/2 - 4) ;	})
-		.text(function(d) {	return  d3.round( (d.Detractor_Documents / d.Total_Documents) * 100, 0) + "%" ;	});
+		.attr("x", function(d){	return x(d.DETRACTOR_DOCUMENTS/2 - 4) ;	})
+		.text(function(d) {	return  d3.round( (d.DETRACTOR_DOCUMENTS / d.TOTAL_DOCUMENTS) * 100, 0) + "%" ;	});
 	newPromoterLabels.enter().insert("text")
 		.attr("y", function(d, i){ return height;})
-		.attr("x", function(d){	return x(d.Detractor_Documents/2 - 4 + (d.Detractor_Documents-0) + (d.Neutral_Documents-0)) ;})
-		.text(function(d) {	return  d3.round( (d.Detractor_Documents / d.Total_Documents) * 100, 0) + "%" ;	});
+		.attr("x", function(d){	return x(d.DETRACTOR_DOCUMENTS/2 - 4 + (d.DETRACTOR_DOCUMENTS-0) + (d.NEUTRAL_DOCUMENTS-0)) ;})
+		.text(function(d) {	return  d3.round( (d.DETRACTOR_DOCUMENTS / d.TOTAL_DOCUMENTS) * 100, 0) + "%" ;	});
 	newNeutralLabels.enter().insert("text")
 		.attr("y", function(d, i){ return height;})
-		.attr("x", function(d){	return x(d.Detractor_Documents/2 - 4 + (d.Detractor_Documents-0)) ;})
-		.text(function(d) {	return  d3.round( (d.Detractor_Documents / d.Total_Documents) * 100, 0) + "%" ;});
+		.attr("x", function(d){	return x(d.DETRACTOR_DOCUMENTS/2 - 4 + (d.DETRACTOR_DOCUMENTS-0)) ;})
+		.text(function(d) {	return  d3.round( (d.DETRACTOR_DOCUMENTS / d.TOTAL_DOCUMENTS) * 100, 0) + "%" ;});
 
 	//update labels
 	newDetractorLabels
 		.transition()
 		.duration(transitionSpeed)
 		.ease(transitionEase)
-		.attr("y", function(d, i){return y(d.Category) + y.rangeBand() / 2  + 2.5; ;}) //2.5 = adjust for 8px font size
-		.attr("x", function(d){	return x(d.Detractor_Documents/2 - 4) ;	})
-		.text(function(d) {	return  d3.round( (d.Detractor_Documents / d.Total_Documents) * 100, 0) + "%" ;	});
+		.attr("y", function(d, i){return y(d.CATEGORY) + y.rangeBand() / 2  + 2.5; ;}) //2.5 = adjust for 8px font size
+		.attr("x", function(d){	return x(d.DETRACTOR_DOCUMENTS/2 - 4) ;	})
+		.text(function(d) {	return  d3.round( (d.DETRACTOR_DOCUMENTS / d.TOTAL_DOCUMENTS) * 100, 0) + "%" ;	});
 	newNeutralLabels
 		.transition()
 		.duration(transitionSpeed)
 		.ease(transitionEase)
-		.attr("y", function(d, i){return y(d.Category) + y.rangeBand() / 2 + 2.5; ;}) //2.5 = adjust for 8px font size
-		.attr("x", function(d){	return x(d.Neutral_Documents/2 - 4 + (d.Detractor_Documents-0) ) ;})
-		.text(function(d) {	return  d3.round( (d.Neutral_Documents / d.Total_Documents) * 100, 0) + "%" ;});
+		.attr("y", function(d, i){return y(d.CATEGORY) + y.rangeBand() / 2 + 2.5; ;}) //2.5 = adjust for 8px font size
+		.attr("x", function(d){	return x(d.NEUTRAL_DOCUMENTS/2 - 4 + (d.DETRACTOR_DOCUMENTS-0) ) ;})
+		.text(function(d) {	return  d3.round( (d.NEUTRAL_DOCUMENTS / d.TOTAL_DOCUMENTS) * 100, 0) + "%" ;});
 	newPromoterLabels
 		.transition()
 		.duration(transitionSpeed)
 		.ease(transitionEase)
-		.attr("y", function(d, i){ return y(d.Category) + y.rangeBand() / 2 + 2.5; ;}) //2.5 = adjust for 8px font size
-		.attr("x", function(d){	return x(d.Promoter_Documents/2 - 4 + (d.Detractor_Documents-0) + (d.Neutral_Documents-0) ) ;})
-		.text(function(d) {	return  d3.round( (d.Promoter_Documents / d.Total_Documents) * 100, 0) + "%" ;});
+		.attr("y", function(d, i){ return y(d.CATEGORY) + y.rangeBand() / 2 + 2.5; ;}) //2.5 = adjust for 8px font size
+		.attr("x", function(d){	return x(d.PROMOTER_DOCUMENTS/2 - 4 + (d.DETRACTOR_DOCUMENTS-0) + (d.NEUTRAL_DOCUMENTS-0) ) ;})
+		.text(function(d) {	return  d3.round( (d.PROMOTER_DOCUMENTS / d.TOTAL_DOCUMENTS) * 100, 0) + "%" ;});
 
 	//exit data (detractors, neutral, promoters)
 	newDetractorLabels.exit()
@@ -1492,7 +1495,7 @@ function redraw() {
 
 //  CREATE MATRIX AND MAP
 
-d3.csv('data/walmartcooccurrence3.csv', function (error, data) {
+d3.csv('data/cooc.csv', function (error, data) {
   var mpr = chordMpr(data);
   
   _.each(data, function (d) { //A
