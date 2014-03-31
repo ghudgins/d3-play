@@ -40,7 +40,7 @@ var detractorColors = d3.scale.linear()
 var promoterColors = d3.scale.linear()
 	.domain([greenLowerBound, 5]) //positive sentiment band
 	.rangeRound([255, 102]); //shades of green (RGB)
-var neutralColors = "rgb(214,209,182)" //"i've been using this tan color" -ellen
+var neutralColors = "rgb(214,209,182)"; //"i've been using this tan color" -ellen
 var headerHeight = 15;
 var headerColor = "#555555"; 
 //global treemap data variables
