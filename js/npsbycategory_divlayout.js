@@ -1619,7 +1619,8 @@ function drawChords (matrix, mmap) {
       .each(function(d) { d.angle = (d.startAngle + d.endAngle) / 2; })
       .attr("dy", ".35em")
       .style("font-family", "helvetica, arial, sans-serif")
-      .style("font-size", "8px")
+      .style("font-size", "10px")
+      .classed("chordLabel", true)
       .attr("text-anchor", function(d) { return d.angle > Math.PI ? "end" : null; })
       .attr("transform", function(d) {
         return "rotate(" + (d.angle * 180 / Math.PI - 90) + ")"
