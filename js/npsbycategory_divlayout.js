@@ -75,6 +75,7 @@ var fill_color = d3.scale.ordinal()
 //global chord variables
 var chordPaths;
 var chord;
+var chordMin = 500; //minimum number of co-occurrences to show up in chord
 //transition settings
 var transitionSpeed = 500; //how fast the transitions execute (in ms)
 var transitionEase = "cubic-in-out"; //type of transition
@@ -1494,7 +1495,8 @@ function redraw() {
 //  CREATE MATRIX AND MAP
 
 d3.csv('data/cooc.csv', function (error, data) {
-  var mpr = chordMpr(data);
+  
+  var mpr = chordMpr(data.filter(function(d1) { return d1.COOC >= chordMin;}));
   
   _.each(data, function (d) { //A
     mpr.addToMap(d.PRIMARY_CAT, d.SENTIMENT, d.PRIMARY_CAT)
