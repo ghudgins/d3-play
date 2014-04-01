@@ -27,20 +27,20 @@
 }
 #content-left {
 	width:120px;
-	height:1300px; 
+	height:1203px; 
 	font-size:10px;	
 }
 #content-main {
 	margin-left:10px;
 	width:1026px;
-	height:308px;
+	height:283px;
 }
 #content-box1, #content-box2 {
 	padding:10px;
 	border:1px solid #bbb;
 	position:absolute;
-	margin-top:348px;
-	height:280px; /*previously 120px*/
+	margin-top:323px;
+	height:207px; /*previously 120px*/
 }
 #content-box1 {
 	margin-left:152px;
@@ -53,7 +53,7 @@
 #content-box3 {
 	margin-left:152px;
 	width:1026px;
-	margin-top:650px;
+	margin-top:553px;
 	padding:10px;
 	border:1px solid #bbb;
 	position:absolute;

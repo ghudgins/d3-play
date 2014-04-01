@@ -7,7 +7,7 @@
 //npsbycategory bar chart settings
 var margin = {top: 20, right: 10, bottom: 10, left: 120},
     width = 510,
-    height = 288 - margin.top - margin.bottom,
+    height = 215 - margin.top - margin.bottom,
     scalePadding = 0.15; //percentage below/above min/max to expand axis (increase to prevent axis clipping)
 //dual-bar settings
 var maxY = 10; //set the number of Categories to display
@@ -28,7 +28,7 @@ var osatToolTip = CustomTooltip("osat_toolTip", 120);
 
 //treemap settings
 var chartWidth = 1020;
-var chartHeight = 300;
+var chartHeight = 275;
 var xscale = d3.scale.linear().range([0, chartWidth]); //zoom control scales
 var yscale = d3.scale.linear().range([0, chartHeight]); //zoom control scales
 //color options on treemap
@@ -49,7 +49,7 @@ var node;
 var tree = [];
 
 //cat influence settings
-var infHeight = 300 - margin.top - margin.bottom ;
+var infHeight = 215 - margin.top - margin.bottom ;
 var tooltip = CustomTooltip("catinfluence_tooltip", 220);
 var layout_gravity = -0.05; //negative values = points push away from each other
 var damper = 0.1; //speed in which alpha is lost
@@ -76,7 +76,7 @@ var fill_color = d3.scale.ordinal()
 var chordPaths;
 var chord;
 //transition settings
-var transitionSpeed = 1000; //how fast the transitions execute (in ms)
+var transitionSpeed = 500; //how fast the transitions execute (in ms)
 var transitionEase = "cubic-in-out"; //type of transition
 
 
@@ -699,6 +699,21 @@ function zoom(d) {
 	//handling for show all selection
   console.log("After drilling, you are on level " + d.depth);
 
+  var child = [];      
+  var grandchildren = [];
+
+  for (i=0; i<d.children.length; i++) {
+    child.push(d.children[i].NODE_NAME);
+
+    if(d.children[i].children) {
+      for (j=0; j<d.children[i].children.length; j++) {
+        grandchildren.push(d.children[i].children[j].NODE_NAME);
+      };
+    };
+  };
+  var grandChildSet = d3.set(grandchildren);
+  var childSet = d3.set(child);
+
 	if( d.depth == 0) {
 		
 		console.log("removing filter...");
@@ -740,20 +755,7 @@ function zoom(d) {
     //fade the chords that are not part of the drill
     chordPaths.classed("fade", function(path) {
 
-      var child = [];      
-      var grandchildren = [];
-
-      for (i=0; i<d.children.length; i++) {
-        child.push(d.children[i].NODE_NAME);
-
-        if(d.children[i].children) {
-          for (j=0; j<d.children[i].children.length; j++) {
-            grandchildren.push(d.children[i].children[j].NODE_NAME);
-          };
-        };
-      };
-      var grandChildSet = d3.set(grandchildren);
-      return !grandChildSet.has(rdr(path.source).gname) && !grandChildSet.has(rdr(path.target).gname);
+      return !grandChildSet.has(path.source.value.primary_cat) && !grandChildSet.has(path.target.value.primary_cat);
 
     });
 	
@@ -786,12 +788,8 @@ function zoom(d) {
     csvdataset = csvdataset.filter(function(d1){return d1.L2_CATEGORY == d.NODE_NAME ;});
     //fade the chords that are not part of the drill
     chordPaths.classed("fade", function(path) {
-      var child = [];      
-      for (i=0; i<d.children.length; i++) {
-        child.push(d.children[i].NODE_NAME);
-      };
-      var childSet = d3.set(child);
-      return !childSet.has(rdr(path.source).gname) && !childSet.has(rdr(path.target).gname);
+
+      return !childSet.has(path.source.value.primary_cat) && !childSet.has(path.target.value.primary_cat);
 
     });    
     //carry previous sort value
@@ -1499,7 +1497,7 @@ d3.csv('data/cooc.csv', function (error, data) {
   var mpr = chordMpr(data);
   
   _.each(data, function (d) { //A
-    mpr.addToMap(d.PRIMARY_CAT, d.SENTIMENT)
+    mpr.addToMap(d.PRIMARY_CAT, d.SENTIMENT, d.PRIMARY_CAT)
   });
 
   mpr.setFilter(function (row, a, b) {
@@ -1509,6 +1507,7 @@ d3.csv('data/cooc.csv', function (error, data) {
       if (!recs[0]) return 0;
       return {sentiment: recs[0].SENTIMENT, 
               volume: recs[0].COOC, 
+              primary_cat: recs[0].PRIMARY_CAT,
               valueOf: value
             };
     });
