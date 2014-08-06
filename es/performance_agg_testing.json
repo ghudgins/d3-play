@@ -49,6 +49,7 @@
 
 //WORKING attribute report filtered by unstructured data
 {
+  "size": 0,
   "aggs": {
     "global_filter": {
       "filter": {
