@@ -62,12 +62,62 @@
             "or": [
               {
                 "term": {
-                  "_words": "flight"
+                  "_words": "a"
                 }
               },
               {
                 "term": {
-                  "_words": "malaysia"
+                  "_words": "the"
+                }
+              },
+              {
+                "term": {
+                  "_words": "be"
+                }
+              },
+              {
+                "term": {
+                  "_words": "but"
+                }
+              },
+              {
+                "term": {
+                  "_words": "and"
+                }
+              },
+              {
+                "term": {
+                  "_words": "an"
+                }
+              },
+              {
+                "term": {
+                  "_words": "app*"
+                }
+              },
+              {
+                "term": {
+                  "_words": "try*"
+                }
+              },
+              {
+                "term": {
+                  "_words": "will*"
+                }
+              },
+              {
+                "term": {
+                  "_words": "mala*"
+                }
+              },
+              {
+                "term": {
+                  "_words": "fli*"
+                }
+              },
+              {
+                "term": {
+                  "_words": "gra*"
                 }
               }
             ]
