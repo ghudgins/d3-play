@@ -1494,7 +1494,7 @@ function redraw() {
 
 //  CREATE MATRIX AND MAP
 
-d3.csv('data/cooc.csv', function (error, data) {
+d3.csv("data/cooc.csv", function (error, data) {
   
   var mpr = chordMpr(data.filter(function(d1) { return d1.COOC >= chordMin;}));
   

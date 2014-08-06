@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="Cp1252"?>
+<output>
+<document id="1:sample.txt">
+	<facts>
+	</facts>
+	<sentence id="16" start-position="0" end-position="52" flags="SentenceStart;ParagraphStart" number="0" type="Affirmative">
+		<text>I can not wait to go to Paris, France later this year.</text>
+		<entities>
+			<annotation id="2" start-position="0" end-position="1" text="I" flags="SentenceStart;ParagraphStart" orthographic-type="AllCapitals" common-type="Word" entity-type-priority="10">
+				<grammar-form id="0" speech-part="Pronoun" case="Nominative" person="First" number="Singular" pronoun-type="Personal" semantic="Person" likelihood="0.9483508840376755" normal-form="I"/>
+			</annotation>
+			<annotation id="3" start-position="2" end-position="7" text="can" flags="SpaceBefore" orthographic-type="FirstSmall" common-type="Word" entity-type-priority="10">
+				<grammar-form id="0" speech-part="ModalVerb" likelihood="0.9019290124819698" normal-form="CAN"/>
+			</annotation>
+			<annotation id="15" start-position="2" end-position="7" text="not" flags="SpaceBefore" orthographic-type="Undefined" common-type="Word" semantic-type="Negation:Negation" entity-type-priority="10">
+				<grammar-form id="0" speech-part="Adverb" likelihood="0.2293768742336758" control-flags="CircAdverb" normal-form="NOT"/>
+			</annotation>
+			<annotation id="4" start-position="8" end-position="12" text="wait" flags="SpaceBefore" orthographic-type="FirstSmall" common-type="Word" entity-type-priority="10" negation="1" modality="Possibility" sem-tense="Present">
+				<grammar-form id="0" speech-part="Verb" tense="PresentSimple" likelihood="0.9811013919009736" control-flags="SubjectAnimate;ObjectAnimate;ObjectInanimate;Infinitive;Object" normal-form="WAIT"/>
+				<relation entity="2" type="Argument" role="Subject"/>
+				<relation entity="6" type="Infinitive"/>
+				<relation entity="3" type="Auxiliary"/>
+				<relation entity="15" type="Circumstance"/>
+			</annotation>
+			<annotation id="5" start-position="13" end-position="15" text="to" flags="SpaceBefore" orthographic-type="FirstSmall" common-type="Word" entity-type-priority="10">
+				<grammar-form id="0" speech-part="InfinitiveMark" likelihood="0.9380522766946018" normal-form="TO"/>
+			</annotation>
+			<annotation id="6" start-position="16" end-position="18" text="go" flags="SpaceBefore" orthographic-type="FirstSmall" common-type="Word" entity-type-priority="10" negation="1" modality="Possibility" sem-tense="Present">
+				<grammar-form id="0" speech-part="Verb" likelihood="0.9573409941547972" control-flags="SubjectAnimate;SubjectInanimate;ObjectInanimate;Infinitive;Adjective;Phrasal;Subject" normal-form="GO TO"/>
+				<relation entity="7" type="Phrasal"/>
+				<relation entity="8" type="Argument" role="DirectObject" connector="TO"/>
+				<relation entity="5" type="Circumstance"/>
+			</annotation>
+			<annotation id="7" start-position="19" end-position="21" text="to" flags="SpaceBefore" orthographic-type="FirstSmall" common-type="Word" entity-type-priority="10">
+				<grammar-form id="0" speech-part="Preposition" likelihood="0.9577662088541105" normal-form="TO"/>
+			</annotation>
+			<annotation id="8" start-position="22" end-position="27" text="Paris" flags="SpaceBefore" orthographic-type="FirstCapital" common-type="Word" semantic-type="Geography:Named" entity-type="NamedEntity" entity-type-priority="300">
+				<grammar-form id="0" speech-part="Noun" proper-type="Geography" number="Singular" likelihood="0.9732891777914318" normal-form="PARIS"/>
+				<relation entity="7" type="Preposition"/>
+			</annotation>
+			<annotation id="9" start-position="27" end-position="28" text="," orthographic-type="Comma" common-type="Delimiter" entity-type-priority="0">
+				<grammar-form id="0" speech-part="Delimiter" likelihood="0.9400079971399375" normal-form=","/>
+			</annotation>
+			<annotation id="10" start-position="29" end-position="35" text="France" flags="SpaceBefore" orthographic-type="FirstCapital" common-type="Word" semantic-type="Geography:Named" entity-type="NamedEntity" entity-type-priority="300">
+				<grammar-form id="0" speech-part="Noun" proper-type="Geography" number="Singular" likelihood="0.9085264280894625" normal-form="FRANCE"/>
+				<relation entity="17" type="Identity"/>
+			</annotation>
+			<annotation id="17" start-position="36" end-position="51" text="later this year" orthographic-type="Undefined" common-type="Word" semantic-type="Date:Date" entity-type="Date" entity-type-priority="100">
+				<grammar-form id="0" speech-part="Adverb" likelihood="0.022614636533396168" normal-form="LATER THIS YEAR"/>
+			</annotation>
+			<annotation id="14" start-position="51" end-position="52" text="." orthographic-type="Break" common-type="Delimiter" entity-type-priority="0">
+				<grammar-form id="0" speech-part="Delimiter" likelihood="0.9572459852465361" normal-form="."/>
+			</annotation>
+		</entities>
+	</sentence>
+</document>
+</output>

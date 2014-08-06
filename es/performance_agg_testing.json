@@ -1,0 +1,99 @@
+{  
+   "aggs":{  
+      "number_of_sentences": {    
+            "filter":{ 
+              "and": [ 
+                { "range":{ "_doc_month": { "gt":6 } } },
+                { "range":{ "_doc_month": { "gt":6 } } }
+                ] },
+            "aggs": {
+              "avg_sentiment": { "avg" : { "field" : "_degreesentimentindex"} }
+            }
+         }
+      }
+   }
+
+//WORKING for calculating sentiment project-wide for a specific attribute value
+
+{
+   "aggs":{  
+      "number_of_sentences": {    
+            "filter":{ 
+              "and": [ 
+                { "term":{ "iso_lang_code": "nl"  } },                
+                { "term":{ "_type": "sentence"}}
+                ] },
+            "aggs": {
+              "avg_sentiment": { "avg" : { "field" : "_degreesentimentindex"} }
+            }
+         }
+      }
+}
+
+//WORKING for calculating document count project-wide for a specific attribute value
+
+{
+    "aggs" : {
+        "number_of_sentences" : {
+            "filter":{
+              "and": [ 
+              { "term":{ "iso_lang_code": "nl"  } },                
+              { "term":{ "_type": "sentence"}}
+              ] },
+              "aggs": {
+                "distinct_documents" : { "cardinality" : { "field" : "_id_document" } } 
+              }
+        }
+    }
+}
+
+//WORKING attribute report filtered by unstructured data
+{
+  "aggs": {
+    "global_filter": {
+      "filter": {
+        "and": [
+          {
+            "term": {
+              "_type": "sentence"
+            }
+          },
+          {
+            "or": [
+              {
+                "term": {
+                  "_words": "flight"
+                }
+              },
+              {
+                "term": {
+                  "_words": "malaysia"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "aggs": {
+        "language_codes": {
+          "terms": {
+            "field": "iso_lang_code",
+            "size": 50
+          },
+          "aggs": {
+            "distinct_documents": {
+              "cardinality": {
+                "field": "_id_document"
+              }
+            },
+            "avg_sentiment": {
+              "avg": {
+                "field": "_degreesentimentindex"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
