@@ -61,9 +61,21 @@
           {
             "or": [
               {
-                "terms": {
-                  "_words": ["a","b","the","and","but","can","app*","flight*","mala*"]
-                }
+                "and": 
+                [
+                  { 
+                    "terms": 
+                    {
+                      "_words": ["am","Im","I was","we are","we were","made me","made us","us are","makes me","making me","I felt","had me feeling","me feel","make me","make us","My wife was","My husband was","My daughter was","My son was","My mother was","My mom was","My mommy was","My father was","My dad was","My daddy was","My grandmother was","My grandma was","My grandfather was","My grandpa was","My neighbor was","My friend was","My friends was","My niece was","My nephew was","My cousin was","My aunt was","My uncle was","My wife felt","My husband felt","My daughter felt","My son felt","My mother felt","My mom felt","My mommy felt","My father felt","My dad felt","My daddy felt","My grandmother felt","My grandma felt","My grandfather felt","My grandpa felt","My neighbor felt","My friend felt","My friends felt","My neice felt","My nephew felt","My cousin felt","My aunt felt","My uncle felt","Made My wife ","Made My husband ","Made My daughter ","Made My son ","Made My mother ","Made My mom ","Made My mommy ","Made My father ","Made My dad ","Made My daddy ","Made My grandmother ","Made My grandma ","Made My grandfather ","Made My grandpa ","Made My neighbor ","Made My friend ","Made My friends ","Made My neice ","Made My nephew ","Made My cousin ","Made My aunt ","Made My uncle ","Made My wife ","Made My husband ","Made My daughter ","Made My son ","Made My mother ","Made My mom ","Made My mommy ","Made My father ","Made My dad ","Made My daddy ","Made My grandmother ","Made My grandma ","Made My grandfather ","Made My grandpa ","Made My neighbor ","Made My friend ","Made My friends ","Made My niece ","Made My nephew ","Made My cousin ","Made My aunt ","Made My uncle "]
+                    }
+                  },
+                  {
+                    "terms":
+                    {
+                      "_words": ["happy", "elated", "delighted", "glad", "overjoyed", "thankful", "satisfied", "pleased", "thrilled", "in heaven", "like heaven", "blissfully", "ecstatic", "extatic", "at ease", "relaxed", "comfort", "comforts", "comfortable", "cloud nine", "pleasantly", "happily", "content", "blessing", "blessed", "grateful", "greatful", "joyful", "joyous", "enjoyment", "enjoyed"] 
+                    }
+                  }
+                ]
               }
             ]
           }
