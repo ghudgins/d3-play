@@ -1,7 +1,7 @@
 
 //  CREATE MATRIX AND MAP
 
-d3.csv('data/walmartcooccurrence3.csv', function (error, data) {
+d3.csv('data/cooc.csv', function (error, data) {
   var mpr = chordMpr(data);
   
   _.each(data, function (d) { //A
