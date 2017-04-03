@@ -389,7 +389,7 @@ var chart = d3.select("#content-main")
 	.append("svg:g");
 //NPSBYCATEGORY - load data...only move forward once data is loaded
 //need to add cool loading screen functions.  maybe in a few years... :)
-d3.csv("../data/csvdataset.csv",function(error,csvdata) {
+d3.csv("data/csvdataset.csv",function(error,csvdata) {
 	if (error) {
 		console.log(error); 
 	} else {
@@ -401,7 +401,7 @@ d3.csv("../data/csvdataset.csv",function(error,csvdata) {
 		chart_control.toggle_view("all");
 
 		//TREEMAP - load data..only move forward once data is loaded 
-		d3.csv("../data/hdata.csv",function(error, data) {
+		d3.csv("data/hdata.csv",function(error, data) {
 		  if(error) {
 		    console.log(error);
 		  } else {
@@ -1494,7 +1494,7 @@ function redraw() {
 
 //  CREATE MATRIX AND MAP
 
-d3.csv("../data/cooc.csv", function (error, data) {
+d3.csv("data/cooc.csv", function (error, data) {
   
   var mpr = chordMpr(data.filter(function(d1) { return d1.COOC >= chordMin;}));
   
